@@ -24,7 +24,7 @@ sns.heatmap(ad_data.corr())
 ```python
 train.drop('Cabin',axis=1,inplace=True)
 ```
-- or fill in, using 
+- or fill in, using statistical methods
 
 ### Converting Categorical Features
 - dummy variable:
