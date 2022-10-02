@@ -1,6 +1,7 @@
 # Supervised learning
 - **Labeled** datasets -> **ground truth** 
 - much more resource intensive than unsupervised learning, but also more accurate
+- most breakthroughs happened in this field
 - Goal: classifying or **predicting** (regression) outcomes, understanding existing relationship between variables
 - **Classification** problems: 
 	- filter out spam emails
