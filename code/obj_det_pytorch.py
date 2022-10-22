@@ -20,12 +20,17 @@ class ObjectDetection:
         while ret:
             results = self.score_frame(frame)
             frame = self.plot_boxes(results, frame)
+            
+            if frame is None:
+                ret, frame = player.read()
+                continue
+            
             cv2.imshow("Frame", frame)
             
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
-                    
+
             ret, frame = player.read()
     
         cv2.destroyAllWindows()
@@ -52,6 +57,7 @@ class ObjectDetection:
         return labels, cord
 
 
+    #TODO multiple plots
     def plot_boxes(self, results, frame):
         labels, cord = results
         n = len(labels)
