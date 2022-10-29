@@ -3,15 +3,24 @@ import torch
 import time
 
 
+def load_model():
+    print("[INFO] loading model...")
+    return torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+
+
+def get_video_stream():
+    print("[INFO] starting video stream...")
+    return cv2.VideoCapture(0) # 0 means read from local camera.
+
+
 class ObjectDetection:
     
     def __init__(self):
-        self.model = self.load_model()
+        self.model = load_model()
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    
-    
+
     def __call__(self):
-        player = self.get_video_stream()
+        player = get_video_stream()
         assert player.isOpened()
         time.sleep(2.0)
         
@@ -35,29 +44,15 @@ class ObjectDetection:
     
         cv2.destroyAllWindows()
         player.stop()
-        
-    
-    def load_model(self):
-        print("[INFO] loading model...")
-        return torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
 
-
-    def get_video_stream(self):
-        print("[INFO] starting video stream...")
-        return cv2.VideoCapture(0) # 0 means read from local camera.
-
-    
     def score_frame(self, frame):
         self.model.to(self.device)
-        # frame = [torch.tensor(frame)]
         results = self.model(frame)
         labels = results.xyxyn[0][:, -1].numpy()
         cord = results.xyxyn[0][:, :-1].numpy()
         
         return labels, cord
 
-
-    #TODO multiple plots
     def plot_boxes(self, results, frame):
         labels, cord = results
         n = len(labels)
@@ -80,7 +75,7 @@ class ObjectDetection:
                         (x1, y1),
                         label_font, 0.9, bgr, 2) #Put a label over box.
             
-            return frame
+        return frame
         
     
 det = ObjectDetection()
